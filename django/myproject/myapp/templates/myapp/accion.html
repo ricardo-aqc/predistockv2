@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predistock - Panel de Control</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'myapp/styles2.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet" />
+    <script
+      type="text/javascript"
+      src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=8OVPJuKDE8oM6PvS08fXglLS3lQJCie1kZIIHknaV9r9Qf3I1LnXMHdEtLT-8-IqHyQsmGGFZJqhDjJuRt-HoeReIX_ctr5Pma8xAuRwQ3QJumsJg-mcBjgIhhF0T3R2mojpW98RgovnP7ZkwUv8-M3T9gq1jXCQ_yEeJH7122xCQCFsezg438Y5bPRwtImWpgSacJtmIKjx1NAVOocIc469FIgA8Fmeeo2MtWczgU02bNzcei-FANh_K9X-XnzUIqTa0264Mgdy6k3eF8GFtw"
+      charset="UTF-8"></script>
+    <script src="https://kit.fontawesome.com/yourcode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <a href="{% url 'home' %}" class="logo">PrediStock</a>
+          <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+        <div class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="{% url 'home' %}"><i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li>
+              <a href="{% url 'acciones' %}"
+                ><i class="fas fa-chart-line"></i> Acciones</a
+              >
+            </li>
+            <li>
+              <a href="{% url 'home' %}#popular"
+                ><i class="fa-solid fa-fire"></i>Populares</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <main class="content">
+        <h1>Detalles del Ticker: {{ ticker }}</h1>
+        <header>
+          {% comment %}
+          <form class="search-bar" onsubmit="return searchRedirect()">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Buscar acciones..."
+              required />
+          </form>
+          {% endcomment %}
+
+          <form class="search-bar" id="search-form">
+            <input
+              type="text"
+              id="search-box"
+              placeholder="Buscar acciones..."
+              required
+              autocomplete="off" />
+          </form>
+          <div id="search-results"></div>
+        </header>
+        <section>
+          <div class="chart-section">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Comparación de Predicción Vs Precio de Cierre Real 100 días
+                </h3>
+              </div>
+              <div class="card-body">
+                <canvas id="comparChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="indicators-section">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Predicción</h3>
+              </div>
+              <div class="card-body">
+                <ul>
+                  <li>
+                    <strong>Precio de Cierre Día Anterior:</strong>
+                    ${{ previousPrice }}
+                  </li>
+                  <li>
+                    <strong>Precio de Cierre Pronosticado:</strong>
+                    ${{ bestPrediction }}
+                  </li>
+                  <li>
+                    <strong>Fecha del Pronóstico:</strong>
+                    {{dateForPrediction}}
+                  </li>
+                  <li><strong>Recomendación:</strong> {{ recommendation }}</li>
+                  <li><strong>Riesgo:</strong> {{ riesgo }}</li>
+                  <!-- Más indicadores técnicos aquí -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br />
+        <section>
+          <div class="chart-section">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Rendimiento Acumulado Utilizando Backtesting de 100 días
+                  anteriores
+                </h3>
+              </div>
+              <div class="card-body">
+                <canvas id="predictionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br />
+        <section>
+          <div class="chart-section">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  Recomendaciones por Predistock últimos 15 días
+                </h3>
+              </div>
+              <div class="card-body">
+                <canvas id="performanceChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/b9ac9f66ff.js"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const chartData = JSON.parse(`{{ chartData|safe }}`);
+
+      // Datos para la gráfica
+      var lineChartData = {
+        labels: chartData.labels,
+        datasets: [
+          {
+            label: "Predistock",
+            backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+            borderColor: ["rgb(255, 99, 132)"],
+            data: chartData.predictions,
+            borderWidth: 1,
+            fill: false,
+          },
+        ],
+      };
+
+      // Opciones de la gráfica
+      var lineChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        title: {
+          display: true,
+          text: "Gráfica de Rendimiento Acumulado Utilizando Backtesting",
+        },
+        scales: {
+          x: {
+            // Changed from xAxes to x
+            display: true,
+            title: {
+              // Changed from scaleLabel to title
+              display: true,
+              text: "Fecha",
+            },
+          },
+          y: {
+            // Changed from yAxes to y
+            display: true,
+            title: {
+              // Changed from scaleLabel to title
+              display: true,
+              text: "Rendimiento de 1 USD",
+            },
+          },
+        },
+      };
+
+      // Crear la instancia de Chart.js
+      var lineChart = new Chart(document.getElementById("predictionChart"), {
+        type: "line",
+        data: lineChartData,
+        options: lineChartOptions,
+      });
+    </script>
+
+    <script>
+      const actionschart_Data = JSON.parse(`{{ actionsChartData|safe }}`);
+      var ctx = document.getElementById("performanceChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: actionschart_Data.labels, // X-axis labels
+          datasets: [
+            {
+              label: "Precio de cierre en dólares",
+              data: actionschart_Data.predictions, // Closing prices
+              borderColor: "black",
+              borderWidth: 2,
+              fill: false,
+              pointStyle: false,
+            },
+            {
+              label: "Señal de compra",
+              data: actionschart_Data.pricesBuy, // Buy signals, null where there is no signal
+              borderColor: "green",
+              borderWidth: 2,
+              pointStyle: "triangle",
+              pointRadius: 10,
+              pointHitRadius: 10,
+              pointBorderColor: "green",
+              pointBackgroundColor: "green",
+              showLine: false, // No line for buy signals
+            },
+            {
+              label: "Señal de venta",
+              data: actionschart_Data.pricesSale, // Sell signals, null where there is no signal
+              borderColor: "red",
+              borderWidth: 2,
+              pointRotation: 180,
+              pointStyle: "triangle", // Use a rotated cross for sell signals
+              pointRadius: 10,
+              pointBorderColor: "red",
+              pointBackgroundColor: "red",
+              showLine: false, // No line for sell signals
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                },
+              },
+            ],
+            y: {
+              // Changed from yAxes to y
+              display: true,
+              title: {
+                // Changed from scaleLabel to title
+                display: true,
+                text: "Precio de Cierre en USD",
+              },
+            },
+            x: {
+              // Changed from yAxes to y
+              display: true,
+              title: {
+                // Changed from scaleLabel to title
+                display: true,
+                text: "Fecha",
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Señales de compra y venta del Predistock",
+          },
+        },
+      });
+    </script>
+    <script>
+      const predchart_Data = JSON.parse(`{{ predChartData|safe }}`);
+
+      // Datos para la gráfica
+      var lineChartData = {
+        labels: predchart_Data.labels,
+        datasets: [
+          {
+            label: "Predistock",
+            backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+            borderColor: ["rgb(255, 99, 132)"],
+            data: predchart_Data.predictions,
+            borderWidth: 1,
+            fill: false,
+          },
+          {
+            label: "Real",
+            backgroundColor: ["rgba(0, 0, 255, 0.2)"], // Light blue with opacity
+            borderColor: ["rgb(0, 0, 255)"], // Solid blue
+            data: predchart_Data.closePrices,
+            borderWidth: 1,
+            fill: false,
+          },
+        ],
+      };
+
+      // Opciones de la gráfica
+      var lineChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        title: {
+          display: true,
+          text: "Gráfica de Rendimiento Acumulado Utilizando Backtesting",
+        },
+        scales: {
+          x: {
+            // Changed from xAxes to x
+            display: true,
+            title: {
+              // Changed from scaleLabel to title
+              display: true,
+              text: "Fecha",
+            },
+          },
+          y: {
+            // Changed from yAxes to y
+            display: true,
+            title: {
+              // Changed from scaleLabel to title
+              display: true,
+              text: "Precio de Cierre en USD",
+            },
+          },
+        },
+      };
+
+      // Crear la instancia de Chart.js
+      var secLineChart = new Chart(document.getElementById("comparChart"), {
+        type: "line",
+        data: lineChartData,
+        options: lineChartOptions,
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchBox = document.getElementById("search-box");
+        const searchResults = document.getElementById("search-results");
+        const searchBtn = document.getElementById("search-btn");
+
+        let selectedIndex = -1;
+
+        const performSearch = function () {
+          const query = searchBox.value.trim();
+          if (query.length < 1) {
+            searchResults.innerHTML = "";
+            return;
+          }
+          fetch(`/search?q=${encodeURIComponent(query)}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.results.length > 0) {
+                searchResults.innerHTML = data.results
+                  .map(
+                    (item, index) =>
+                      `<div class="search-result-item" data-ticker="${
+                        item.ticker
+                      }" tabindex="0" ${
+                        index === 0 ? 'class="selected"' : ""
+                      }>${item.ticker} - ${item.name}</div>`
+                  )
+                  .join("");
+                selectedIndex = 0; // Reset to the first element in the list
+              } else {
+                searchResults.innerHTML =
+                  '<div class="search-result-item no-results">No results found.</div>';
+                selectedIndex = -1;
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              searchResults.innerHTML =
+                '<div class="search-result-item no-results">Error fetching results.</div>';
+            });
+        };
+
+        // Event delegation to handle click on each search result item
+        searchResults.addEventListener("click", function (event) {
+          const target = event.target;
+          if (
+            target.classList.contains("search-result-item") &&
+            !target.classList.contains("no-results")
+          ) {
+            const ticker = target.dataset.ticker;
+            window.location.href = `/accion/?ticker=${ticker}`;
+          }
+        });
+
+        searchBox.addEventListener("input", performSearch);
+
+        searchBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          if (selectedIndex !== -1) {
+            const selectedElement = searchResults.children[selectedIndex];
+            if (!selectedElement.classList.contains("no-results")) {
+              const ticker = selectedElement.dataset.ticker;
+              window.location.href = `/accion/?ticker=${ticker}`;
+            }
+          }
+        });
+
+        searchBox.addEventListener("keydown", function (event) {
+          let items =
+            searchResults.getElementsByClassName("search-result-item");
+          if (event.key === "ArrowDown" && selectedIndex < items.length - 1) {
+            selectedIndex++;
+            items[selectedIndex].classList.add("selected");
+            if (selectedIndex > 0)
+              items[selectedIndex - 1].classList.remove("selected");
+          } else if (event.key === "ArrowUp" && selectedIndex > 0) {
+            selectedIndex--;
+            items[selectedIndex].classList.add("selected");
+            items[selectedIndex + 1].classList.remove("selected");
+          } else if (event.key === "Enter" && selectedIndex !== -1) {
+            const selectedElement = items[selectedIndex];
+            if (!selectedElement.classList.contains("no-results")) {
+              const ticker = selectedElement.dataset.ticker;
+              window.location.href = `/accion/?ticker=${ticker}`;
+              event.preventDefault(); // Prevent form submission if in a form
+            }
+          }
+        });
+
+        searchResults.addEventListener("mouseover", function (event) {
+          let target = event.target;
+          if (
+            target.classList.contains("search-result-item") &&
+            !target.classList.contains("no-results")
+          ) {
+            if (selectedIndex !== -1)
+              items[selectedIndex].classList.remove("selected");
+            target.classList.add("selected");
+            selectedIndex = Array.from(items).indexOf(target);
+          }
+        });
+
+        searchResults.addEventListener("mouseout", function (event) {
+          let target = event.target;
+          if (target.classList.contains("search-result-item")) {
+            target.classList.remove("selected");
+            selectedIndex = -1;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predistock - Predicción de Precios de Acciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {% load static %}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <link
+      rel="stylesheet"
+      href="{% static 'myapp/styles.css' %}"
+      type="text/css" />
+  </head>
+  <header>
+    <nav>
+      <div class="logo"><a href="/home"> Predistock</a></div>
+      <div class="nav-links">
+        <a href="/home">Inicio</a>
+        <a href="/acciones">Acciones</a>
+        <a href="#">Sobre Nosotros</a>
+      </div>
+    </nav>
+  </header>
+  <body>
+    <div class="container">
+      <!-- Sección de la tabla de acciones -->
+      <section class="stock-table">
+        <h2>Lista de Acciones</h2>
+        <table id="stocksTable" class="stripe" style="width: 100%">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Símbolo</th>
+              <th>Precio del Día</th>
+              <th>Cambio de Precio Respecto al Día Anterior</th>
+              <th>Porcentaje de Cambio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in stocks %}
+            <tr>
+              <td>{{ stock.name }}</td>
+              <td>{{ stock.symbol }}</td>
+              <td>{{ stock.lastsale }}</td>
+              <td>${{ stock.netchange }}</td>
+              <td>{{ stock.pctchange }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+      <!-- ... resto de tu HTML ... -->
+    </div>
+    <script>
+      $(document).ready(function () {
+        var table = $("#stocksTable").DataTable({
+          language: {
+            url: "https://cdn.datatables.net/plug-ins/2.0.6/i18n/es-MX.json",
+          },
+        });
+
+        // Usa el método on() de DataTables para escuchar los clics en los elementos tr del tbody
+        $("#stocksTable tbody").on("click", "tr", function () {
+          var data = table.row(this).data();
+          // Asumiendo que los datos contienen una URL o una ruta en el primer índice
+          window.location.href = "/accion/?ticker=" + data[1];
+        });
+      });
+    </script>
+  </body>
+</html>

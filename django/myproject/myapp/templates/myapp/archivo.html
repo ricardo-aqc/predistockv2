@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predistock - Predicción de Precios de Acciones</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo"> <a href="/home"> Predistock </div>
+        <div class="nav-links">
+          <a href="/home">Inicio</a>
+          <a href="/acciones">Acciones</a>
+          <a href="#about">Sobre Nosotros</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Predicciones precisas, ganancias inteligentes</h1>
+        <div class="search-box">
+          <input
+            type="text"
+            id="search-box"
+            placeholder="Ingrese símbolo de acción"
+            autocomplete="oFF" />
+          <button id="search-btn">Buscar</button>
+          <div id="search-results"></div>
+        </div>
+      </section>
+
+      <section class="popular-stocks" id="popular">
+        <h2>Acciones Populares</h2>
+        <div class="stock-cards">
+          <div class="stock-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+              alt="Apple Inc." />
+            <h3>Microsoft Corporation. (MSFT)</h3>
+            <p>Innovación en software y soluciones de computación en la nube.</p>
+            <a href="/accion/?ticker=MSFT" class="more-info">Ver más</a>
+          </div>
+          <!-- Más tarjetas de acciones aquí -->
+          <div class="stock-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/44/The_Walt_Disney_Company_Logo.svg"
+              alt="Apple Inc." />
+            <h3>The Walt Disney Company (DIS)</h3>
+            <p>Entretenimiento y medios globales con énfasis en películas, parques temáticos y TV.</p>
+            <a href="/accion/?ticker=DIS" class="more-info">Ver más</a>
+          </div>
+          <div class="stock-card">
+            <img
+              src="https://www.vectorlogo.zone/logos/amazon/amazon-ar21.svg"
+              alt="Apple Inc." />
+            <h3>Amazon.com, Inc. (AMZN)</h3>
+            <p>Comercio electrónico global y servicios de computación en la nube. </p>
+              <a href="/accion/?ticker=AMZN" class="more-info">Ver más</a>
+          </div>
+          <div class="stock-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/a/a4/NVIDIA_logo.svg"
+              alt="Apple Inc." />
+            <h3>Nvidia Corporation (NVDA)</h3>
+            <p>Líder en tecnologías de gráficos y computación de inteligencia artificial.</p>
+            <a href="/accion/?ticker=NVDA" class="more-info">Ver más</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="about" id="about">
+        <h2>Sobre Nosotros</h2>
+        <p>
+          Predistock es una plataforma avanzada de predicción de precios de
+          acciones en la bolsa de NYSE y NASDAQ. Nuestro algoritmo utiliza
+          inteligencia artificial y análisis de datos para ofrecer predicciones
+          precisas y oportunas sobre el precio de cierre de las acciones.
+        </p>
+        <div class="testimonials">
+          <div class="testimonial">
+            <p>
+              "Predistock ha cambiado la forma en que invierto! Sus
+              predicciones son increíblemente precisas."
+            </p>
+            <span class="author">- Juan Pérez</span>
+          </div>
+          <!-- Más testimonios aquí -->
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-links">
+        <a href="#">Inicio</a>
+        <a href="#popular">Acciones Populares</a>
+        <a href="#about">Sobre Nosotros</a>
+      </div>
+      <div class="social-media">
+        <a href="#"
+          ><img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/2491px-Logo_of_Twitter.svg.png"
+            alt="Twitter"
+        /></a>
+        <a href="#"
+          ><img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/1024px-2021_Facebook_icon.svg.png"
+            alt="Facebook"
+        /></a>
+        <a href="#"
+          ><img
+            src="https://cdn-icons-png.flaticon.com/256/174/174857.png"
+            alt="LinkedIn"
+        /></a>
+      </div>
+      <div class="copyright">
+        &copy; 2024 Predistock. Todos los derechos reservados.
+      </div>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchBox = document.getElementById("search-box");
+        const searchResults = document.getElementById("search-results");
+        const searchBtn = document.getElementById("search-btn");
+    
+        let selectedIndex = -1;
+    
+        const performSearch = function () {
+          const query = searchBox.value.trim();
+          if (query.length < 1) {
+            searchResults.innerHTML = "";
+            return;
+          }
+          fetch(`/search?q=${encodeURIComponent(query)}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.results.length > 0) {
+                searchResults.innerHTML = data.results
+                  .map(
+                    (item, index) =>
+                      `<div class="search-result-item" data-ticker="${
+                        item.ticker
+                      }" tabindex="0" ${
+                        index === 0 ? 'class="selected"' : ""
+                      }>${item.ticker} - ${item.name}</div>`
+                  )
+                  .join("");
+                selectedIndex = 0; // Reset to the first element in the list
+              } else {
+                searchResults.innerHTML =
+                  '<div class="search-result-item no-results">No results found.</div>';
+                selectedIndex = -1;
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              searchResults.innerHTML =
+                '<div class="search-result-item no-results">Error fetching results.</div>';
+            });
+        };
+    
+        // Event delegation to handle click on each search result item
+        searchResults.addEventListener("click", function (event) {
+          const target = event.target;
+          if (
+            target.classList.contains("search-result-item") &&
+            !target.classList.contains("no-results")
+          ) {
+            const ticker = target.dataset.ticker;
+            window.location.href = `/accion/?ticker=${ticker}`;
+          }
+        });
+    
+        searchBox.addEventListener("input", performSearch);
+    
+        searchBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          if (selectedIndex !== -1) {
+            const selectedElement = searchResults.children[selectedIndex];
+            if (!selectedElement.classList.contains("no-results")) {
+              const ticker = selectedElement.dataset.ticker;
+              window.location.href = `/accion/?ticker=${ticker}`;
+            }
+          }
+        });
+    
+        searchBox.addEventListener("keydown", function (event) {
+          let items =
+            searchResults.getElementsByClassName("search-result-item");
+          if (event.key === "ArrowDown" && selectedIndex < items.length - 1) {
+            selectedIndex++;
+            items[selectedIndex].classList.add("selected");
+            if (selectedIndex > 0)
+              items[selectedIndex - 1].classList.remove("selected");
+          } else if (event.key === "ArrowUp" && selectedIndex > 0) {
+            selectedIndex--;
+            items[selectedIndex].classList.add("selected");
+            items[selectedIndex + 1].classList.remove("selected");
+          } else if (event.key === "Enter" && selectedIndex !== -1) {
+            const selectedElement = items[selectedIndex];
+            if (!selectedElement.classList.contains("no-results")) {
+              const ticker = selectedElement.dataset.ticker;
+              window.location.href = `/accion/?ticker=${ticker}`;
+              event.preventDefault(); // Prevent form submission if in a form
+            }
+          }
+        });
+    
+        searchResults.addEventListener("mouseover", function (event) {
+          let target = event.target;
+          if (
+            target.classList.contains("search-result-item") &&
+            !target.classList.contains("no-results")
+          ) {
+            if (selectedIndex !== -1)
+              items[selectedIndex].classList.remove("selected");
+            target.classList.add("selected");
+            selectedIndex = Array.from(items).indexOf(target);
+          }
+        });
+    
+        searchResults.addEventListener("mouseout", function (event) {
+          let target = event.target;
+          if (target.classList.contains("search-result-item")) {
+            target.classList.remove("selected");
+            selectedIndex = -1;
+          }
+        });
+      });
+    </script>
+    
+    
+  </body>
+</html>

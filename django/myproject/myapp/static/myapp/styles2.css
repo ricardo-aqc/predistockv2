@@ -1,0 +1,332 @@
+/* Paleta de colores */
+:root {
+  --primary-color: #333;
+  --secondary-color: #f2f2f2;
+  --accent-color: #c0a96d;
+  --text-color: #555;
+}
+
+/* Tipografía */
+body {
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Lora", serif;
+  color: var(--primary-color);
+}
+
+/* Estilos generales */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--secondary-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  overflow: visible;
+}
+
+/* Barra lateral */
+.sidebar {
+  width: 250px; /* Ancho de la barra lateral */
+  background-color: var(--accent-color);
+  color: #fff;
+  padding: 20px;
+  position: sticky; /* Cambiado de fixed a sticky */
+  top: 0; /* Se mantiene en la parte superior */
+  height: 100vh; /* Ajuste para que ocupe el 100% de la altura */
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sidebar .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.sidebar-nav li {
+  margin-bottom: 15px;
+}
+
+.sidebar-nav li a {
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.sidebar-nav li a:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+}
+
+/* Contenido principal */
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.search-bar {
+  flex: 1;
+}
+
+.search-bar input {
+  width: 99%;
+  padding: 8px 12px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+}
+
+section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.chart-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.indicators-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-title {
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+.card-body {
+  padding: 20px;
+  min-height: 400px;
+  overflow: auto;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: var(--primary-color);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: var(--primary-color);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+}
+
+.indicators-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.indicators-section li {
+  font-size: 1.5rem; /* Tamaño de fuente aumentado */
+  margin-bottom: 15px; /* Incrementar el espacio entre elementos */
+}
+
+.indicators-section .card-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.indicators-section ul {
+  width: 100%; /* Full width para el contenedor principal */
+}
+
+.indicators-section li {
+  width: 60%; /* Cada elemento ocupa casi la mitad del contenedor */
+  box-sizing: border-box; /* Incluye padding y border en el ancho del elemento */
+}
+
+/* Media Query para pantallas de hasta 768px */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Reducción del ancho para tabletas */
+  }
+
+  .content {
+    margin-left: 200px; /* Ajuste del margen izquierdo para tabletas */
+  }
+}
+
+/* Media Query para pantallas de hasta 480px */
+@media (max-width: 480px) {
+  .sidebar {
+    left: -250px; /* Ocultar la barra lateral por defecto en móviles */
+  }
+
+  .sidebar.open {
+    left: 0; /* Mostrar la barra lateral en móviles al abrir */
+  }
+
+  .content {
+    margin-left: 0; /* Eliminar el margen izquierdo en móviles */
+  }
+
+  .chart-section,
+  .indicators-section {
+    min-width: 100%; /* Ajustar el ancho mínimo al 100% en móviles */
+  }
+}
+
+/* Ajustes adicionales para garantizar que la barra lateral y el contenido no se sobrepongan */
+
+.content {
+  flex-grow: 1;
+  margin-left: 100px; /* Ajuste para el ancho de la barra lateral */
+}
+
+/* Ajustes responsivos para dispositivos móviles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+  }
+
+  .sidebar.open {
+    width: 200px;
+  }
+
+  .content {
+    margin-left: 0; /* El contenido ocupa todo el ancho en móviles */
+  }
+
+  .content.sidebar-open {
+    margin-left: 200px; /* Ajuste cuando la barra lateral esté abierta */
+  }
+}
+/* Position the search results directly below the search bar */
+#search-results {
+  position: absolute;
+  top: 100%; /* Position the top of the element right below the search input */
+  left: 0;
+  right: 0;
+  width: 100%; /* Match the width of the search-container */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Make sure this is higher than any other element it should overlay */
+  max-height: 400px;
+  overflow-y: auto; /* If more results than can fit in the max-height */
+  border-radius: 0 0 4px 4px;
+}
+/* Additional styles for interaction effects */
+.search-result-item.selected,
+.search-result-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.search-result-item {
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* To ensure that all search result items start with a consistent background and text color */
+.search-result-item {
+  background-color: var(
+    --secondary-color
+  ); /* Light background for non-selected items */
+  color: var(--text-color); /* Standard text color */
+}

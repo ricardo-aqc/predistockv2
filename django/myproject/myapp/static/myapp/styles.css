@@ -1,0 +1,376 @@
+/* Paleta de colores */
+:root {
+  --primary-color: #333;
+  --secondary-color: #f2f2f2;
+  --accent-color: #c0a96d;
+  --text-color: #555;
+}
+
+/* Tipografía */
+body {
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Lora", serif;
+  color: var(--primary-color);
+}
+
+/* Estilos generales */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+/* Encabezado */
+header {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.nav-links a {
+  margin-left: 20px;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-color);
+}
+
+.search-bar input {
+  padding: 8px 12px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+}
+
+/* Secciones principales */
+main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+section {
+  margin-bottom: 60px;
+}
+
+.container > section {
+  margin-bottom: 60px;
+}
+
+.hero {
+  background-color: var(--secondary-color);
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.popular-stocks h2,
+.about h2,
+.contact h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.stock-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.stock-card {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.stock-card:hover {
+  transform: translateY(-5px);
+}
+
+.stock-card img {
+  max-width: 80px;
+  margin-bottom: 10px;
+  min-height: 60px;
+  max-height: 60px;
+}
+
+.stock-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.stock-card p {
+  margin-bottom: 20px;
+}
+
+.more-info {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+  color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.more-info:hover {
+  background-color: var(--primary-color);
+}
+
+.about p {
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.testimonial {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.testimonial p {
+  margin-bottom: 20px;
+}
+
+.author {
+  font-style: italic;
+}
+
+.contact form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.contact input,
+.contact textarea {
+  padding: 12px 16px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+}
+
+.contact button {
+  padding: 12px 16px;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact button:hover {
+  background-color: var(--primary-color);
+}
+
+/* Pie de página */
+footer {
+  background-color: var(--secondary-color);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.footer-links a {
+  margin: 0 10px;
+  font-weight: 700;
+  transition: color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color);
+}
+
+.social-media {
+  margin-top: 10px;
+}
+
+.social-media a {
+  margin: 0 10px;
+}
+
+.social-media img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.social-media img:hover {
+  transform: scale(1.2);
+}
+
+.copyright {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* This will ensure the input and search button are on the same line */
+.search-box {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+/* This will style the input to look more modern */
+.search-box input {
+  width: 40%;
+  border: 2px solid var(--primary-color);
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin-right: -5px;
+  outline: none;
+  border-right: none;
+}
+
+/* This will style the button to align it with the input */
+.search-box button {
+  background-color: var(--accent-color);
+  border: 2px solid var(--accent-color);
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Add some hover effect on the button for interactivity */
+.search-box button:hover {
+  background-color: darken(var(--accent-color), 10%);
+}
+
+/* This will style the search result container to float and match the width of the input */
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(40% + 20px); /* Same as input width plus button */
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border-radius: 0 0 20px 20px;
+  z-index: 1000;
+}
+
+/* Additional styles for interaction effects */
+.search-result-item.selected,
+.search-result-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.search-result-item {
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* To ensure that all search result items start with a consistent background and text color */
+.search-result-item {
+  background-color: var(
+    --secondary-color
+  ); /* Light background for non-selected items */
+  color: var(--text-color); /* Standard text color */
+}
+
+/* data tables*/
+/* Include this in your styles.css file */
+
+/* Basic reset for table */
+#stocksTable {
+  border-collapse: collapse;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#stocksTable thead {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#stocksTable tbody tr:nth-child(odd) {
+  background-color: var(--secondary-color);
+}
+
+#stocksTable tbody tr:hover {
+  background-color: var(--accent-color);
+  cursor: pointer;
+}
+
+/* Table fonts */
+#stocksTable,
+#stocksTable th,
+#stocksTable td {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Pagination buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 6px 12px;
+  margin-left: -1px;
+  border: 1px solid var(--primary-color);
+  background-color: white;
+  color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 767px) {
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px;
+  }
+}
